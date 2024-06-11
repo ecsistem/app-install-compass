@@ -1,0 +1,19 @@
+name: Teste de Instalação de Aplicativos
+
+on:
+  push:
+    branches:
+      - main  # Substitua pela sua branch principal
+
+jobs:
+  test-installation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v2
+
+      - name: Instalação dos aplicativos
+        run: |
+          chmod +x install_apps.sh
+          ./install_apps.sh
