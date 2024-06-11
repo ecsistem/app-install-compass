@@ -3,7 +3,7 @@ update_and_upgrade:
 	sudo apt update -y && sudo apt upgrade -y && sudo apt-get install curl -y
 
 # Instalar o Snap
-install-snap:
+install_snap:
     sudo apt install snapd
 
 # Oracle JDK 8
@@ -123,6 +123,6 @@ install-geckodriver:
 
 
 # Regras especiais
-all: update_and_upgrade install-snap install_oracle_jdk_8 install_oracle_jdk_11 install_sdkman install_maven install_nvm install_rvm install_go install_git install_docker install_docker_compose install_nosqlbooster install_postman install_soapui install_helm install_kubectl install_k9s install_chromedriver install_geckodriver
+all: update_and_upgrade install_snap install_oracle_jdk_8 install_oracle_jdk_11 install_sdkman install_maven install_nvm install_rvm install_go install_git install_docker install_docker_compose install_nosqlbooster install_postman install_soapui install_helm install_kubectl install_k9s install_chromedriver install_geckodriver
 
 .PHONY: all
