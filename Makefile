@@ -1,12 +1,10 @@
 #Update & Upgade
 update_and_upgrade:
-sudo apt update -y && sudo apt upgrade -y && sudo apt-get install curl -y
-
+	sudo apt update -y && sudo apt upgrade -y && sudo apt-get install curl -y
 
 # Instalar o Snap
 install-snap:
     sudo apt install snapd
-
 
 # Oracle JDK 8
 install_oracle_jdk_8:
