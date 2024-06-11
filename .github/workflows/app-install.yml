@@ -1,9 +1,7 @@
 name: Teste de Instalação de Aplicativos
 
 on:
-  push:
-    branches:
-      - main  # Substitua pela sua branch principal
+  workflow_dispatch:
 
 jobs:
   test-installation:
