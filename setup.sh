@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Função para registrar a instalação no log
 log_installation() {
     echo "[$(date)] $1 instalado" >> installation_log.txt
@@ -26,6 +28,13 @@ install_brew(){
     brew install hello
     log_installation "Brew"
     echo -e "${GREEN}Brew instalado com sucesso!!!${NC}"
+}
+
+# Função para instalar o Team 
+install_team() {
+    snap install teams-for-linux 
+    log_installation "Team"
+    echo -e "${GREEN}Team instalado com sucesso!!!${NC}"
 }
 
 # Função para instalar o Visual Studio Code
@@ -186,6 +195,8 @@ install_geckodriver() {
 
 # Função para registrar todas as instalações no log
 all() {
+    update_and_upgrade
+    install_team
     install_snap
     install_brew
     install_code
@@ -236,7 +247,8 @@ menu() {
     echo "  20) Instalar k9s"
     echo "  21) Instalar ChromeDriver"
     echo "  22) Instalar GeckoDriver"
-    echo "  23) Executar todas as instalações"
+    echo "  23) Instalar Team"
+    echo "  24) Executar todas as instalações"
     echo "  0) Sair"
     read -p "Escolha uma opção: " option
     case $option in
@@ -262,7 +274,8 @@ menu() {
         20) install_k9s ;;
         21) install_chromedriver ;;
         22) install_geckodriver ;;
-        23) all ;;
+        23) install_team ;;
+        24) all ;;
         0) echo "Saindo..."; exit ;;
         *) echo -e "${YELLOW}Opção inválida!${NC}"; menu ;;
     esac
