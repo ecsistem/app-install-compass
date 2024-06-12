@@ -303,5 +303,36 @@ menu() {
     menu
 }
 
-# Iniciar o menu
-menu
+# Verificar se há argumentos de linha de comando e chamar a função correspondente
+if [ "$#" -eq 1 ]; then
+    case $1 in
+        update) update_and_upgrade ;;
+        snap) install_snap ;;
+        brew) install_brew ;;
+        vscode) install_code ;;
+        jdk8) install_oracle_jdk_8 ;;
+        jdk11) install_oracle_jdk_11 ;;
+        sdkman) install_sdkman ;;
+        maven) install_maven ;;
+        nvm) install_nvm ;;
+        rvm) install_rvm ;;
+        golang) install_go ;;
+        git) install_git ;;
+        docker) install_docker ;;
+        docker-compose) install_docker_compose ;;
+        nosqlbooster) install_nosqlbooster ;;
+        postman) install_postman ;;
+        soapui) install_soapui ;;
+        helm) install_helm ;;
+        kubectl) install_kubectl ;;
+        k9s) install_k9s ;;
+        chromedriver) install_chromedriver ;;
+        geckodriver) install_geckodriver ;;
+        team) install_team ;;
+        all) all ;;
+        *) echo -e "${YELLOW}Opção inválida!${NC}"; menu ;;
+    esac
+else
+    # Iniciar o menu
+    menu
+fi
