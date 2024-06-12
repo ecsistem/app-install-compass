@@ -6,9 +6,23 @@ update_and_upgrade() {
     sudo apt-get install curl -y
 }
 
+
 # Função para instalar o Snap
 install_snap() {
     sudo apt install -y snapd
+}
+
+# Função para instalar o Brew
+install_brew(){
+    sudo apt-get install build-essential curl file git
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    echo "eval $($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+    brew install hello
+}
+
+# Função para instalar o Snap
+install_code() {
+    snap install code
 }
 
 # Função para instalar o Oracle JDK 8
@@ -31,7 +45,7 @@ install_sdkman() {
 
 # Função para instalar o Maven
 install_maven() {
-    sudo apt install -y maven
+    sudo apt install -y maven #mvn -version
 }
 
 # Função para instalar o NVM
@@ -39,21 +53,19 @@ install_nvm() {
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 }
 
-# Função para instalar o RVM e Ruby
+# Função para instalar o RVM e Ruby (não pegou)
 install_rvm() {
     sudo apt install -y software-properties-common
     sudo apt-add-repository -y ppa:rael-gc/rvm
     sudo apt-get update
     sudo apt install -y rvm
     source /etc/profile.d/rvm.sh
+    snap install ruby
 }
 
 # Função para instalar o Go Lang
 install_go() {
-    curl -OL https://golang.org/dl/go1.13.15.linux-amd64.tar.gz
-    sudo tar -C /usr/local -xvf go1.13.15.linux-amd64.tar.gz
-    echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.profile
-    source ~/.profile
+    snap install go --classic 
 }
 
 # Função para instalar o Git
@@ -67,9 +79,7 @@ install_git() {
 
 # Função para instalar o Docker
 install_docker() {
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh
-    sudo usermod -aG docker $USER
+    snap install docker
 }
 
 # Função para instalar o Docker Compose
@@ -87,9 +97,7 @@ install_nosqlbooster() {
 
 # Função para instalar o Postman
 install_postman() {
-    wget -O Postman.tar.gz "https://dl.pstmn.io/download/latest/linux64"
-    sudo mkdir /opt/Postman
-    sudo tar -zxvf Postman.tar.gz -C /opt/Postman --strip-components=1
+    sudo snap install postman
 }
 
 # Função para instalar o SoapUI
@@ -112,7 +120,7 @@ install_kubectl() {
 
 # Função para instalar o k9s
 install_k9s() {
-    brew install derailed/k9s/k9s
+    brew install k9s
 }
 
 # Função para instalar o ChromeDriver
@@ -122,6 +130,7 @@ install_chromedriver() {
     sudo mv chromedriver /usr/bin
     sudo chmod 755 /usr/bin/chromedriver
     rm chromedriver_linux64.zip
+    echo "chromedriver instalado com sucesso!!!"
 }
 
 # Função para instalar o GeckoDriver
@@ -136,6 +145,8 @@ install_geckodriver() {
 all() {
     update_and_upgrade
     install_snap
+    install_brew
+    install_code
     install_oracle_jdk_8
     install_oracle_jdk_11
     install_sdkman
@@ -160,6 +171,8 @@ all() {
 case "$1" in
     update_and_upgrade) update_and_upgrade ;;
     install_snap) install_snap ;;
+    install_brew) install_brew ;;
+    install_code) install_code ;;
     install_oracle_jdk_8) install_oracle_jdk_8 ;;
     install_oracle_jdk_11) install_oracle_jdk_11 ;;
     install_sdkman) install_sdkman ;;
@@ -179,5 +192,5 @@ case "$1" in
     install_chromedriver) install_chromedriver ;;
     install_geckodriver) install_geckodriver ;;
     all) all ;;
-    *) echo "Uso: $0 {all|update_and_upgrade|install_snap|install_oracle_jdk_8|install_oracle_jdk_11|install_sdkman|install_maven|install_nvm|install_rvm|install_go|install_git|install_docker|install_docker_compose|install_nosqlbooster|install_postman|install_soapui|install_helm|install_kubectl|install_k9s|install_chromedriver|install_geckodriver}" ;;
+    *) echo "Uso: $0 {all|update_and_upgrade|install_snap|install_brew|install_code|install_oracle_jdk_8|install_oracle_jdk_11|install_sdkman|install_maven|install_nvm|install_rvm|install_go|install_git|install_docker|install_docker_compose|install_nosqlbooster|install_postman|install_soapui|install_helm|install_kubectl|install_k9s|install_chromedriver|install_geckodriver}" ;;
 esac
