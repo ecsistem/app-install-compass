@@ -55,7 +55,7 @@ install_team() {
 # Função para instalar o Visual Studio Code
 install_code() {
     install_snap
-    sudo snap install code
+    sudo snap install code --classic
     log_installation "Visual Studio Code"
     echo -e "${GREEN}Visual Studio Code instalado com sucesso!!!${NC}"
 }
