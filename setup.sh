@@ -1,53 +1,68 @@
 #!/bin/bash
 
+# Definindo cores
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # Sem cor
+
 # Função para registrar a instalação no log
 log_installation() {
     echo "[$(date)] $1 instalado" >> installation_log.txt
 }
 
-#Atualizar e instalar o  curl
+# Atualizar e instalar o curl
 update_and_upgrade() {
     sudo apt update -y && sudo apt upgrade -y
     sudo apt-get install curl -y
-    log_installation "Alualização do apt"
+    log_installation "Atualização do apt"
     echo -e "${GREEN}Atualização e upgrade concluídos com sucesso!!!${NC}"
 }
 
 # Função para instalar o Snap
 install_snap() {
-    sudo apt install -y snapd
-    log_installation "Snap"
-    echo -e "${GREEN}Snap instalado com sucesso!!!${NC}"
+    if ! command -v snap &> /dev/null; then
+        sudo apt install -y snapd
+        log_installation "Snap"
+        echo -e "${GREEN}Snap instalado com sucesso!!!${NC}"
+    else
+        echo -e "${YELLOW}Snap já está instalado!${NC}"
+    fi
 }
 
 # Função para instalar o Brew
-install_brew(){
-    sudo apt-get install build-essential curl file git
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    echo "eval $($(brew --prefix)/bin/brew shellenv)" >>~/.profile
-    brew install hello
-    log_installation "Brew"
-    echo -e "${GREEN}Brew instalado com sucesso!!!${NC}"
+install_brew() {
+    if ! command -v brew &> /dev/null; then
+        sudo apt-get install build-essential curl file git -y
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+        source ~/.profile
+        brew install hello
+        log_installation "Brew"
+        echo -e "${GREEN}Brew instalado com sucesso!!!${NC}"
+    else
+        echo -e "${YELLOW}Brew já está instalado!${NC}"
+    fi
 }
 
 # Função para instalar o Team 
 install_team() {
-    snap install teams-for-linux 
+    install_snap
+    sudo snap install teams-for-linux 
     log_installation "Team"
     echo -e "${GREEN}Team instalado com sucesso!!!${NC}"
 }
 
 # Função para instalar o Visual Studio Code
 install_code() {
-    snap install code
+    install_snap
+    sudo snap install code
     log_installation "Visual Studio Code"
     echo -e "${GREEN}Visual Studio Code instalado com sucesso!!!${NC}"
 }
 
 # Função para instalar o Oracle JDK 8
 install_oracle_jdk_8() {
-    sudo apt install -y openjdk-8-jre
-    sudo apt install -y openjdk-8-jdk
+    sudo apt install -y openjdk-8-jre openjdk-8-jdk
     log_installation "Oracle JDK 8"
     echo -e "${GREEN}Oracle JDK 8 instalado com sucesso!!!${NC}"
 }
@@ -70,7 +85,7 @@ install_sdkman() {
 
 # Função para instalar o Maven
 install_maven() {
-    sudo apt install -y maven #mvn -version
+    sudo apt install -y maven
     log_installation "Maven"
     echo -e "${GREEN}Maven instalado com sucesso!!!${NC}"
 }
@@ -82,21 +97,22 @@ install_nvm() {
     echo -e "${GREEN}NVM instalado com sucesso!!!${NC}"
 }
 
-# Função para instalar o RVM e Ruby (não pegou)
+# Função para instalar o RVM e Ruby
 install_rvm() {
     sudo apt install -y software-properties-common
     sudo apt-add-repository -y ppa:rael-gc/rvm
     sudo apt-get update
     sudo apt install -y rvm
     source /etc/profile.d/rvm.sh
-    snap install ruby
+    sudo snap install ruby --classic
     log_installation "RVM e Ruby"
     echo -e "${GREEN}RVM e Ruby instalados com sucesso!!!${NC}"
 }
 
 # Função para instalar o Go Lang
 install_go() {
-    snap install go --classic 
+    install_snap
+    sudo snap install go --classic 
     log_installation "Go Lang"
     echo -e "${GREEN}Go Lang instalado com sucesso!!!${NC}"
 }
@@ -114,7 +130,8 @@ install_git() {
 
 # Função para instalar o Docker
 install_docker() {
-    snap install docker
+    install_snap
+    sudo snap install docker
     log_installation "Docker"
     echo -e "${GREEN}Docker instalado com sucesso!!!${NC}"
 }
@@ -138,6 +155,7 @@ install_nosqlbooster() {
 
 # Função para instalar o Postman
 install_postman() {
+    install_snap
     sudo snap install postman
     log_installation "Postman"
     echo -e "${GREEN}Postman instalado com sucesso!!!${NC}"
@@ -145,15 +163,16 @@ install_postman() {
 
 # Função para instalar o SoapUI
 install_soapui() {
-    wget -O SoapUI.tar.gz "https://s3.amazonaws.com/downloads.eviware/soapuios/5.6.0/SoapUI-x64-5.6.0.sh"
-    sudo chmod +x SoapUI.tar.gz
-    sudo ./SoapUI.tar.gz -q -dir /opt/SoapUI
+    wget -O SoapUI.sh "https://s3.amazonaws.com/downloads.eviware/soapuios/5.6.0/SoapUI-x64-5.6.0.sh"
+    sudo chmod +x SoapUI.sh
+    sudo ./SoapUI.sh -q -dir /opt/SoapUI
     log_installation "SoapUI"
     echo -e "${GREEN}SoapUI instalado com sucesso!!!${NC}"
 }
 
 # Função para instalar o Helm
 install_helm() {
+    install_snap
     sudo snap install helm --classic
     log_installation "Helm"
     echo -e "${GREEN}Helm instalado com sucesso!!!${NC}"
@@ -161,14 +180,16 @@ install_helm() {
 
 # Função para instalar o kubectl
 install_kubectl() {
+    install_snap
     sudo snap install kubectl --classic
     kubectl version --client
     log_installation "kubectl"
-    echo -e "${GREEN}Kubectl instalado com sucesso!!!${NC}"
+    echo -e "${GREEN}kubectl instalado com sucesso!!!${NC}"
 }
 
 # Função para instalar o k9s
 install_k9s() {
+    install_brew
     brew install k9s
     log_installation "k9s"
     echo -e "${GREEN}k9s instalado com sucesso!!!${NC}"
@@ -181,7 +202,7 @@ install_chromedriver() {
     sudo mv chromedriver /usr/bin
     sudo chmod 755 /usr/bin/chromedriver
     log_installation "ChromeDriver"
-    echo -e "${GREEN}chromedriver instalado com sucesso!!!${NC}"
+    echo -e "${GREEN}ChromeDriver instalado com sucesso!!!${NC}"
 }
 
 # Função para instalar o GeckoDriver
