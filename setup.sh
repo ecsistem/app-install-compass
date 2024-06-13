@@ -34,7 +34,10 @@ install_brew() {
     if ! command -v brew &> /dev/null; then
         sudo apt-get install build-essential curl file git -y
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-        echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+        test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+        test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+        test -r ~/.bash_profile && echo "eval ($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+        echo "eval $($(brew --prefix)/bin/brew shellenv)" >>~/.profile
         source ~/.profile
         brew install hello
         log_installation "Brew"
