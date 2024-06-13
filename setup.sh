@@ -193,7 +193,7 @@ install_kubectl() {
 # Função para instalar o k9s
 install_k9s() {
     install_brew
-    brew install k9s
+    brew install derailed/k9s/k9s
     log_installation "k9s"
     echo -e "${GREEN}k9s instalado com sucesso!!!${NC}"
 }
