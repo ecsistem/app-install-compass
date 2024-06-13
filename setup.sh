@@ -32,14 +32,11 @@ install_snap() {
 # Função para instalar o Brew
 install_brew() {
     if ! command -v brew &> /dev/null; then
-        sudo apt-get install build-essential curl file git -y
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-        test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
-        test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-        test -r ~/.bash_profile && echo "eval ($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
-        echo "eval $($(brew --prefix)/bin/brew shellenv)" >>~/.profile
-        source ~/.profile
-        brew install hello
+        git clone https://github.com/Homebrew/brew homebrew
+        mv homebrew /usr/bin && cd /usr/bin
+        sudo eval "$(homebrew/bin/brew shellenv)"
+        sudo brew update --force --quiet
+        sudo chmod -R go-w "$(brew --prefix)/share/zsh"
         log_installation "Brew"
         echo -e "${GREEN}Brew instalado com sucesso!!!${NC}"
     else
